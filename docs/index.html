@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="A versatile pipeline for generating and editing 3D head avatars with textual prompts.">
+  <meta name="keywords" content="3D generative model, head avatar, diffusion models, neural rendering">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HeadSculpt</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+  
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="stylesheet" href="./static/css/result.css">
+  <!-- <link rel="icon" href="./static/images/favicon.svg"> -->
+
+
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+
+</head>
+<body>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-2 publication-title">HeadSculpt: Crafting 3D Head Avatars with Text</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://brandonhanx.github.io/">Xiao Han</a><sup>1,4*</sup>,</span>
+            <span class="author-block">
+              <a href="https://yukangcao.github.io/">Yukang Cao</a><sup>2*</sup>,</span>
+            <span class="author-block">
+              <a href="https://www.kaihan.org/">Kai Han</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://surrey-uplab.github.io/">Xiatian Zhu</a><sup>1,5</sup>,
+            </span>
+            <p>
+            <span class="author-block">
+              <a href="https://jiankangdeng.github.io/">Jiankang Deng</a><sup>3</sup>,</span>
+            <span class="author-block">
+              <a href="http://personal.ee.surrey.ac.uk/Personal/Y.Song/">Yi-Zhe Song</a><sup>1,4</sup>,</span>
+            <span class="author-block">
+              <a href="http://personal.ee.surrey.ac.uk/Personal/T.Xiang/index.html">Tao Xiang</a><sup>1,4†</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://i.cs.hku.hk/~kykwong/">Kwan-Yee K. Wong</a><sup>2†</sup>
+            </span>
+          </div>
+
+          <div class="is-size-6 publication-authors">
+            <span class="footnote"><sup>*</sup>Equal contributions  <sup>†</sup>Corresponding authors</span>
+          </div>
+          <div class="is-size-6 publication-authors">
+            <p>
+            <span class="author-block"><sup>1</sup>University of Surrey <sup>2</sup>The University of Hong Kong <sup>3</sup>
+Imperial College London</span>
+            <p>
+            <span class="author-block"><sup>4</sup>iFlyTek-Surrey Joint Research Centre on AI <sup>5</sup>
+Surrey Institute for People-Centred AI</span>
+          </div>
+
+          <!-- <div class="is-size-4 publication-authors">
+            <span class="author-block">
+              Anonymous Author(s)
+            </span>
+          </div> -->
+
+          <!-- <div class="is-size-5 publication-authors">
+            NeurIPS 2023 Submission
+          </div> -->
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>ArXiv</span>
+                </a>
+              </span>
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Supplementary Material</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/BrandonHanx/HeadSculpt"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code (coming soon)</span>
+                  </a>
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="my-hr">
+  <hr>
+</div>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Recently, text-guided 3D generative methods have made remarkable advancements in producing high-quality textures and geometry, capitalizing on the proliferation of large vision-language and image diffusion models. However, existing methods still struggle to create high-fidelity 3D head avatars in two aspects: (1) They rely mostly on a pre-trained text-to-image diffusion model whilst missing the necessary 3D awareness and head priors. This makes them prone to inconsistency and geometric distortions in the generated avatars. (2) They fall short in fine-grained editing. This is primarily due to the inherited limitations from the pre-trained 2D image diffusion models, which become more pronounced when it comes to 3D head avatars. In this work, we address these challenges by introducing a versatile coarse-to-fine pipeline dubbed HeadSculpt for crafting (i.e., generating and editing) 3D head avatars from textual prompts. Specifically, we first equip the diffusion model with 3D awareness by leveraging landmark-based control and a learned textual embedding representing the back view appearance of heads, enabling 3D-consistent head avatar generations. We further propose a novel identity-aware editing score distillation strategy to optimize a textured mesh with a high-resolution differentiable rendering technique. This enables identity preservation while following the editing instruction. We showcase HeadSculpt's superior fidelity and editing capabilities through comprehensive experiments and comparisons with existing methods.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+    <hr>
+
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">3D Head Avatar Generation</h2>
+        <div class="content has-text-justified">
+          <p>
+            HeadSculpt can create an assortment of head avatars, including humans (both celebrities and ordinary individuals) as well as
+            non-human characters like superheroes, comic/game characters, paintings, and more.
+          </p>
+        </div>
+        <table>
+          <tr>
+            <td><img src="./static/gif/panther.gif"></td>
+            <td><img src="./static/gif/panther_normal.gif"></td>
+            <td><img src="./static/gif/hulk.gif"></td>
+            <td><img src="./static/gif/hulk_normal.gif"></td>
+          </tr>
+          <tr>
+            <td colspan="2" align="center">a DSLR portrait of Black Panther in Marvel</td>
+            <td colspan="2" align="center">a DSLR portrait of Hulk</td>
+          </tr>
+
+          <tr>
+            <td><img src="./static/gif/messi.gif"></td>
+            <td><img src="./static/gif/messi_normal.gif"></td>
+            <td><img src="./static/gif/dali.gif"></td>
+            <td><img src="./static/gif/dali_normal.gif"></td>
+          </tr>
+          <tr>
+            <td colspan="2" align="center">a DSLR portrait of Lionel Messi</td>
+            <td colspan="2" align="center">a DSLR portrait of Salvador Dalí</td>
+          </tr>
+
+          <tr>
+            <td><img src="./static/gif/naruto.gif"></td>
+            <td><img src="./static/gif/naruto_normal.gif"></td>
+            <td><img src="./static/gif/vincent.gif"></td>
+            <td><img src="./static/gif/vincent_normal.gif"></td>
+          </tr>
+          <tr>
+            <td colspan="2" align="center">a head of Naruto Uzumaki</td>
+            <td colspan="2" align="center">a portrait of Vincent van Gogh</td>
+          </tr>
+
+          <tr>
+            <td><img src="./static/gif/tolstoy.gif"></td>
+            <td><img src="./static/gif/tolstoy_normal.gif"></td>
+            <td><img src="./static/gif/kratos.gif"></td>
+            <td><img src="./static/gif/kratos_normal.gif"></td>
+          </tr>
+          <tr>
+            <td colspan="2" align="center">a DSLR portrait of Leo Tolstoy</td>
+            <td colspan="2" align="center">a DSLR portrait of Kratos in God of War</td>
+          </tr>
+
+          <tr>
+            <td><img src="./static/gif/boy.gif"></td>
+            <td><img src="./static/gif/boy_normal.gif"></td>
+            <td><img src="./static/gif/soldier.gif"></td>
+            <td><img src="./static/gif/soldier_normal.gif"></td>
+          </tr>
+          <tr>
+            <td colspan="2" align="center">a DSLR portrait of a boy with facial painting</td>
+            <td colspan="2" align="center">a DSLR portrait of a female soldier, wearing a helmet</td>
+          </tr>
+
+          <tr>
+            <td><img src="./static/gif/simpson.gif"></td>
+            <td><img src="./static/gif/simpson_normal.gif"></td>
+            <td><img src="./static/gif/army.gif"></td>
+            <td><img src="./static/gif/army_normal.gif"></td>
+          </tr>
+          <tr>
+            <td colspan="2" align="center">a head of Simpson in the Simpsons</td>
+            <td colspan="2" align="center">a head of Terracotta Army</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">3D Head Avatar Editing</h2>
+        <div class="content has-text-justified">
+          <p>
+            In addition to head avatar creations, our method enables fine-grained editing, including local changes, shape/texture modifications, and style transfers.
+          </p>
+        </div>
+
+        <table>
+          <tr>
+            <td><img src="./static/gif/saul.gif"></td>
+            <td style="position:relative;">
+              <img src="./static/gif/saul_normal.gif">
+              <div style="position:absolute;top:50%;right:-20px;transform:translate(0,-50%);">
+                <svg width="40" height="20">
+                  <defs>
+                    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#48ecc3"/>
+                      <stop offset="100%" stop-color="#4feef1"/>
+                    </linearGradient>
+                  </defs>
+                  <path d="M5,10 L30,10" stroke="url(#grad1)" stroke-width="4" marker-end="url(#arrowhead)"/>
+                  <defs>
+                    <marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                      <path d="M 0 0 L 10 5 L 0 10 z" fill="url(#grad1)" />
+                    </marker>
+                  </defs>
+                </svg>
+              </div>
+            </td>
+            <td><img src="./static/gif/saul_clown.gif"></td>
+            <td><img src="./static/gif/saul_clown_normal.gif"></td>
+          </tr>
+          <tr>
+            <td colspan="2" align="center">a DSLR portrait of Saul Goodman</td>
+            <td colspan="2" align="center">turn him into a clown</td>
+          </tr>
+        </table>
+
+        <table>
+          <tr>
+            <td><img src="./static/gif/obama.gif"></td>
+            <td style="position:relative;">
+              <img src="./static/gif/obama_normal.gif">
+              <div style="position:absolute;top:50%;right:-20px;transform:translate(0,-50%);">
+                <svg width="40" height="20">
+                  <defs>
+                    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#48ecc3"/>
+                      <stop offset="100%" stop-color="#4feef1"/>
+                    </linearGradient>
+                  </defs>
+                  <path d="M5,10 L30,10" stroke="url(#grad1)" stroke-width="4" marker-end="url(#arrowhead)"/>
+                  <defs>
+                    <marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                      <path d="M 0 0 L 10 5 L 0 10 z" fill="url(#grad1)" />
+                    </marker>
+                  </defs>
+                </svg>
+              </div>
+            </td>
+            <td><img src="./static/gif/obama_pixar.gif"></td>
+            <td><img src="./static/gif/obama_pixar_normal.gif"></td>
+          </tr>
+          <tr>
+            <td colspan="2" align="center">a DSLR portrait of Obama wearing a baseball cap</td>
+            <td colspan="2" align="center">turn him into Pixar style</td>
+          </tr>
+        </table>
+
+        <table>
+          <tr>
+            <td><img src="./static/gif/geralt.gif"></td>
+            <td style="position:relative;">
+              <img src="./static/gif/geralt_normal.gif">
+              <div style="position:absolute;top:50%;right:-20px;transform:translate(0,-50%);">
+                <svg width="40" height="20">
+                  <defs>
+                    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#48ecc3"/>
+                      <stop offset="100%" stop-color="#4feef1"/>
+                    </linearGradient>
+                  </defs>
+                  <path d="M5,10 L30,10" stroke="url(#grad1)" stroke-width="4" marker-end="url(#arrowhead)"/>
+                  <defs>
+                    <marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                      <path d="M 0 0 L 10 5 L 0 10 z" fill="url(#grad1)" />
+                    </marker>
+                  </defs>
+                </svg>
+              </div>
+            </td>
+            <td><img src="./static/gif/geralt_laugh.gif"></td>
+            <td><img src="./static/gif/geralt_laugh_normal.gif"></td>
+          </tr>
+          <tr>
+            <td colspan="2" align="center">a DSLR portrait of Geralt in The Witcher 3</td>
+            <td colspan="2" align="center">make him simling</td>
+          </tr>
+        </table>
+
+        <table>
+          <tr>
+            <td><img src="./static/gif/hepburn.gif"></td>
+            <td style="position:relative;">
+              <img src="./static/gif/hepburn_normal.gif">
+              <div style="position:absolute;top:50%;right:-20px;transform:translate(0,-50%);">
+                <svg width="40" height="20">
+                  <defs>
+                    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#48ecc3"/>
+                      <stop offset="100%" stop-color="#4feef1"/>
+                    </linearGradient>
+                  </defs>
+                  <path d="M5,10 L30,10" stroke="url(#grad1)" stroke-width="4" marker-end="url(#arrowhead)"/>
+                  <defs>
+                    <marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                      <path d="M 0 0 L 10 5 L 0 10 z" fill="url(#grad1)" />
+                    </marker>
+                  </defs>
+                </svg>
+              </div>
+            </td>
+            <td><img src="./static/gif/hepburn_claymation.gif"></td>
+            <td><img src="./static/gif/hepburn_claymation_normal.gif"></td>
+          </tr>
+          <tr>
+            <td colspan="2" align="center">a DSLR portrait of Audrey Hepburn</td>
+            <td colspan="2" align="center">make her a claymation</td>
+          </tr>
+        </table>
+
+        <table>
+          <tr>
+            <td><img src="./static/gif/caesar.gif"></td>
+            <td style="position:relative;">
+              <img src="./static/gif/caesar_normal.gif">
+              <div style="position:absolute;top:50%;right:-20px;transform:translate(0,-50%);">
+                <svg width="40" height="20">
+                  <defs>
+                    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#48ecc3"/>
+                      <stop offset="100%" stop-color="#4feef1"/>
+                    </linearGradient>
+                  </defs>
+                  <path d="M5,10 L30,10" stroke="url(#grad1)" stroke-width="4" marker-end="url(#arrowhead)"/>
+                  <defs>
+                    <marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                      <path d="M 0 0 L 10 5 L 0 10 z" fill="url(#grad1)" />
+                    </marker>
+                  </defs>
+                </svg>
+              </div>
+            </td>
+            <td><img src="./static/gif/caesar_wood.gif"></td>
+            <td><img src="./static/gif/caesar_wood_normal.gif"></td>
+          </tr>
+          <tr>
+            <td colspan="2" align="center">a head of Caesar in Rise of the Planet of the Apes</td>
+            <td colspan="2" align="center">make it carved out of wood</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- <hr> -->
+
+<!--     <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Method</h2>
+        <div class="content has-text-justified">
+          <p>
+
+          </p>
+        </div> 
+        <img src="./static/gif/pipeline.png">
+      </div>
+    </div>
+
+  </div>    -->
+</section>  
+
+
+<!-- <div class="my-hr">
+  <hr>
+</div> -->
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is constructed using the source code provided by <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>, and we are grateful for the template they provided. 
+            Allow us to express our appreciation for their contribution.                              
+          </p>
+    
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
