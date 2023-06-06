@@ -15,10 +15,10 @@
 [![Paper](http://img.shields.io/badge/Paper-arxiv.2306.03038-B31B1B.svg)](https://arxiv.org/abs/2306.03038)
 <a href="https://brandonhan.uk/HeadSculpt"><img alt="page" src="https://img.shields.io/badge/Webpage-0054a6?logo=Google%20chrome&logoColor=white"></a>
 
-<img src="https://github.com/brandonhanx/headsculpt/blob/main/docs/static/gif/saul.gif?raw=true" width="240px">
-<img src="https://github.com/brandonhanx/headsculpt/blob/main/docs/static/gif/saul_normal.gif?raw=true" width="240px">
-<img src="https://github.com/brandonhanx/headsculpt/blob/main/docs/static/gif/saul_clown.gif?raw=true" width="240px">
-<img src="https://github.com/brandonhanx/headsculpt/blob/main/docs/static/gif/saul_clown_normal.gif?raw=true" width="240px">
+<img src="https://github.com/brandonhanx/headsculpt/blob/main/docs/static/gif/saul.gif?raw=true" width="220px">
+<img src="https://github.com/brandonhanx/headsculpt/blob/main/docs/static/gif/saul_normal.gif?raw=true" width="220px">
+<img src="https://github.com/brandonhanx/headsculpt/blob/main/docs/static/gif/saul_clown.gif?raw=true" width="220px">
+<img src="https://github.com/brandonhanx/headsculpt/blob/main/docs/static/gif/saul_clown_normal.gif?raw=true" width="220px">
   
 Please refer to our webpage for more visualizations.
 </div>
